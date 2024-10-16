@@ -1,0 +1,189 @@
+basePath: /api/v1
+definitions:
+  aibo_internal_types.Aibo:
+    properties:
+      createdAt:
+        type: string
+      currentDelta:
+        type: number
+      dailyBudget:
+        type: number
+      email:
+        type: string
+      id:
+        type: string
+      isPremium:
+        type: boolean
+      password:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  aibo_internal_types.RegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
+host: ${APP_URL}
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a server for managing Aibo's backend.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Aibo API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: Get the health status of the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get database health
+      tags:
+      - health
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate an aibo and receive a JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login
+      tags:
+      - auth
+  /migrate:
+    post:
+      description: Run the database migrations
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Database migrated
+          schema:
+            type: string
+        "500":
+          description: Error message
+          schema:
+            type: string
+      summary: Run database migrations
+      tags:
+      - database
+  /profile:
+    get:
+      description: Get the profile of the authenticated aibo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/aibo_internal_types.Aibo'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get aibo profile
+      tags:
+      - profile
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new aibo account
+      parameters:
+      - description: Aibo registration details
+        in: body
+        name: aibo
+        required: true
+        schema:
+          $ref: '#/definitions/aibo_internal_types.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a new aibo
+      tags:
+      - auth
+swagger: "2.0"

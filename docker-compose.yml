@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  Aibo:
+    image: aibo-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "42069:42069"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    networks:
+      - mysql_network
+
+networks:
+  mysql_network:
+    external: true
+    name: dev_mysql_network
