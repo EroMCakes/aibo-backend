@@ -66,3 +66,11 @@ func (r *CatBudRepository) GetAllCatBudsByAiboID(aiboID uuid.UUID) ([]types.CatB
 
 	return catBuds, nil
 }
+
+// DeleteCatBudByID deletes a CatBud entry by its ID from the database.
+//
+// The CatBud is deleted using the provided ID. If the CatBud is deleted successfully,
+// a nil error is returned. If there is an error during deletion, a gorm error is returned.
+func (r *CatBudRepository) DeleteCatBudByID(id snowflake.ID) error {
+	return r.db.Delete(&types.CatBud{}, "id = ?", id).Error
+}

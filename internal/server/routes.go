@@ -22,6 +22,8 @@ func SetupRoutes(router *gin.Engine, db database.Service) {
 	router.POST("/migrate", handlers.HandleMigrate(db))
 
 	authHandler := handlers.NewAuthService(db.GetDB())
+	cbRepo := handlers.NewCatBudService(db.GetDB())
+
 	// setupRoutes sets up the routes for the server.
 	//
 	// It creates an instance of AuthService and assigns it to handle the "/register" and "/login" routes.
@@ -44,11 +46,12 @@ func SetupRoutes(router *gin.Engine, db database.Service) {
 		protected.PUT("/update-password", authHandler.UpdatePassword)
 		protected.POST("/logout", authHandler.Logout)
 
-		// catbuds := protected.Group("/catbud")
-		// {
-		// 	catbuds.GET("/:aiboId", authHandler.GetCatBuds)
+		catbuds := protected.Group("/catbud")
+		{
+			catbuds.GET("/:aiboId", cbRepo.GetCatBuds)
+			catbuds.POST("/", cbRepo.CreateCatBuds)
 
-		// }
+		}
 	}
 
 	aiborepo := authHandler.AiboRepository

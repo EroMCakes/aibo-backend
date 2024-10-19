@@ -22,7 +22,8 @@ type UpdateCatBudRequest struct {
 	// @example 1234567890123456
 	ID snowflake.ID `json:"id"`
 	// Updated CatBud information
-	CatBud CatBud `json:"cat_bud"`
+	Category string   `json:"category"`
+	Budget   *float64 `json:"budget"`
 }
 
 // DeleteCatBudRequest represents the request to delete a CatBud
@@ -70,9 +71,9 @@ type DeleteCatBudResponse struct {
 	Message string `json:"message"`
 }
 
-// CreateCatBudResponse represents the response after creating CatBuds
+// CreateCatBudsResponse represents the response after creating CatBuds
 // @Description Create CatBuds response structure
-type CreateCatBudResponse struct {
+type CreateCatBudsResponse struct {
 	// Success message
 	// @example CatBuds successfully created
 	Message string `json:"message"`
